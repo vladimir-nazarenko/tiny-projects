@@ -1,0 +1,51 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <bean id="postgresManager" class="com.magnet.entries.PostgresDBManager"
+         init-method="connectToDB" destroy-method="close">
+       <property name="builder" ref="postgresManagerBuilder"/>
+    </bean>
+
+    <bean id="producer" class="com.magnet.entries.ConsecutiveNumberProducer">
+        <property name="limit" value="1000000"/>
+    </bean>
+
+    <bean id="postgresManagerBuilder" class="com.magnet.entries.PostgresDBManager.PostgresDBManagerBuilder">
+        <property name="connectionString" value="jdbc:postgresql://localhost:5432/postgres"/>
+        <property name="userName" value="vova"/>
+        <property name="userPassword" value="monaco"/>
+        <property name="batchSize" value="1000"/>
+        <property name="tableName" value="TEST"/>
+        <property name="fieldName" value="FIELD"/>
+        <property name="numberProducer" ref="producer"/>
+    </bean>
+
+    <bean id="inputXmlFileName" class="java.lang.String" factory-method="valueOf">
+        <constructor-arg value="1.xml"/>
+    </bean>
+
+    <bean id="outputXmlFileName" class="java.lang.String" factory-method="valueOf">
+        <constructor-arg value="2.xml"/>
+    </bean>
+
+    <bean id="xmlWriter" class="com.magnet.entries.NumXmlWriter" depends-on="postgresManager">
+        <property name="fileName" ref="inputXmlFileName"/>
+    </bean>
+
+    <bean id="xmlTransformer" class="com.magnet.entries.NumXmlTransformer">
+        <property name="dataFileName" ref="inputXmlFileName"/>
+        <property name="styleResource" value="/transform.xml"/>
+        <property name="outputFileName" ref="outputXmlFileName"/>
+    </bean>
+
+    <bean id="xmlReducer" class="com.magnet.entries.NumXmlReducer">
+        <property name="finalXmlFileName" ref="outputXmlFileName"/>
+    </bean>
+
+</beans>
