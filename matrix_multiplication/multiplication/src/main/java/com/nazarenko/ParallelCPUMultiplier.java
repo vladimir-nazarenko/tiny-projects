@@ -32,18 +32,18 @@ public class ParallelCPUMultiplier extends Multiplier {
 
     }
 
-    private final static class MatrixWorker implements Runnable {
-        private final int startRow;
-        private final int endRow;
-        Multiplier multiplier;
-
-        public MatrixWorker() {
-
-        }
-
-        @Override
-        public void run() {
-            multiplier.multiply(startRow);
-        }
-    }
+//    private final static class MatrixWorker implements Runnable {
+//        private final int startRow;
+//        private final int endRow;
+//        Multiplier multiplier;
+//
+//        public MatrixWorker() {
+//
+//        }
+//
+//        @Override
+//        public void run() {
+//            multiplier.multiply(startRow);
+//        }
+//    }
 }
