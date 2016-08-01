@@ -5,8 +5,6 @@ package com.nazarenko;
  */
 public class RecursiveMultiplier extends Multiplier {
     
-    private final Multiplier baseMultiplier = new StraightforwardMultiplier(); 
-    
     /**
      * Strategy method. Facilitates the multiplication of two submatrices. Gets two submatrices in terms of
      * upper-left element and lower-right element and adds their product to the corresponding submatrix of the
@@ -28,18 +26,18 @@ public class RecursiveMultiplier extends Multiplier {
     @Override
     void multiply(int lUpperRow, int lLeftCol, int lLowerRow, int lRightCol, int rUpperRow, int rLeftCol, 
                   int rLowerRow, int rRightCol, int[][] left, int[][] right, int[][] result) {
-        if (lLowerRow > lUpperRow || lRightCol > lLeftCol ||
-                (rLowerRow > rUpperRow || rRightCol > rLeftCol)) {
+        if (lLowerRow < lUpperRow || lRightCol < lLeftCol ||
+                (rLowerRow < rUpperRow || rRightCol < rLeftCol))
             return;
-        } else if (lLowerRow == lUpperRow && lRightCol == lLeftCol &&
+        if (lLowerRow == lUpperRow && lRightCol == lLeftCol &&
                    rUpperRow == rLowerRow && rRightCol == rLeftCol) {
-            result[lLowerRow][rLeftCol] = left[lLowerRow][lLeftCol] * right[rLowerRow][rLeftCol];
+            result[lLowerRow][rLeftCol] += left[lLowerRow][lLeftCol] * right[rLowerRow][rLeftCol];
         }
         else {
             // left matrix rows etc.
             final int midLR = (lUpperRow + lLowerRow) / 2;
             final int midLC = (lLeftCol  + lRightCol) / 2;
-            final int midRR = (rUpperRow + lLowerRow) / 2;
+            final int midRR = (rUpperRow + rLowerRow) / 2;
             final int midRC = (rLeftCol  + rRightCol) / 2;
             // AE AF CF CE BG BH DH DG
             multiply(lUpperRow, lLeftCol, midLR    , midLC    , rUpperRow, rLeftCol, midRR    , midRC    , left, right, result);

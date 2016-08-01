@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
  */
 public class StrassenMultiplier extends Multiplier {
 
-    final Multiplier base = new RecursiveMultiplier();
+    final Multiplier base = new RowWiseMultiplier();
 
     private int[][] sumSquare(int[][]... A) {
         final int numArrays = A.length;
@@ -56,7 +56,9 @@ public class StrassenMultiplier extends Multiplier {
 
     private int[][] multiplyPowerOfTwo(int[][] left, int[][] right) {
         final int n = left.length;
-        if (n < 64)
+//        if (n == 1)
+//            return new int[][]{{left[0][0] * right[0][0]}};
+        if (n <= 64)
             return base.multiply(left, right);
 
         int[][] A11 = splitSquare(left, 1, 1);

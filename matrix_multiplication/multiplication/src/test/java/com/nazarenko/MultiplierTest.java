@@ -138,6 +138,8 @@ public abstract class MultiplierTest{
 
     @Test
     public void multiplySubmatrixReturnsCorrectProduct() {
+//        final MatrixSetup setup = MatrixSetup.SQUARE;
+//        final int part = squareSize / 3; assert squareSize >= 3;
 //        final int[][] actual = getMultiplier().multiply(setup.getLeft(), setup.getRight());
 //        final int[][] reference = setup.getReference();
 //        assertEquals("Width mismatch" , actual.length   , reference.length   );
