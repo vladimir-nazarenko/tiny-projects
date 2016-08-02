@@ -6,6 +6,6 @@ package com.nazarenko;
 public class StrassenMultiplierTest extends MultiplierTest {
     @Override
     protected Multiplier getMultiplier() {
-        return new StrassenMultiplier();
+        return new StrassenMultiplier(new RowWiseMultiplier(), 64);
     }
 }

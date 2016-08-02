@@ -7,7 +7,23 @@ import java.util.stream.IntStream;
  */
 public class StrassenMultiplier extends Multiplier {
 
-    final Multiplier base = new RowWiseMultiplier();
+    public StrassenMultiplier() {
+        this(new StraightforwardMultiplier());
+    }
+
+    public StrassenMultiplier(Multiplier multiplier) {
+//        if (multiplier instanceof StrassenMultiplier)
+//            throw new IllegalArgumentException("Recursive initialization");
+        this(multiplier, 64);
+    }
+
+    public StrassenMultiplier(Multiplier multiplier, int baseDim) {
+        base = multiplier;
+        this.baseDim = baseDim;
+    }
+
+    private final Multiplier base;
+    private final int baseDim;
 
     private int[][] sumSquare(int[][]... A) {
         final int numArrays = A.length;
@@ -56,9 +72,7 @@ public class StrassenMultiplier extends Multiplier {
 
     private int[][] multiplyPowerOfTwo(int[][] left, int[][] right) {
         final int n = left.length;
-//        if (n == 1)
-//            return new int[][]{{left[0][0] * right[0][0]}};
-        if (n <= 64)
+        if (n <= baseDim)
             return base.multiply(left, right);
 
         int[][] A11 = splitSquare(left, 1, 1);

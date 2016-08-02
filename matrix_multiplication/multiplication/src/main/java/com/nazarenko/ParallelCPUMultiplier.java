@@ -44,8 +44,8 @@ public class ParallelCPUMultiplier extends Multiplier {
         final int gridWidth  = gridDim.getKey();
         final int gridHeight = gridDim.getValue();
 
-        int curRow  = lUpperRow;
-        int curCol  = rLeftCol;
+        int curRow = lUpperRow;
+        int curCol = rLeftCol;
         final int rowStep = ceilDiv(nRows, gridHeight);
         final int colStep = ceilDiv(nCols, gridWidth);
         for (int i = 0; i < gridHeight; i++) {
@@ -53,8 +53,8 @@ public class ParallelCPUMultiplier extends Multiplier {
             curCol  = rLeftCol;
             for (int j = 0; j < gridWidth; j++) {
                 final int rightCol = Integer.min(curCol + colStep - 1, rRightCol);
-                MatrixWorker worker = new MatrixWorker(curRow, bottomRow, lLeftCol, lRightCol,
-                        rUpperRow, rLowerRow, curCol, rightCol,
+                MatrixWorker worker = new MatrixWorker(curRow, lLeftCol, bottomRow, lRightCol,
+                        rUpperRow, curCol, rLowerRow, rightCol,
                         left, right, result, multiplier);
                 futures.add(executor.submit(worker));
                 curCol += colStep;
@@ -127,7 +127,7 @@ public class ParallelCPUMultiplier extends Multiplier {
 
         @Override
         public void run() {
-            multiplier.multiply(lUpperRow, lLowerRow, lLeftCol, lRightCol, rUpperRow, rLowerRow, rLeftCol, rRightCol, left, right, result);
+            multiplier.multiply(lUpperRow, lLeftCol, lLowerRow, lRightCol, rUpperRow, rLeftCol, rLowerRow, rRightCol, left, right, result);
         }
     }
 }

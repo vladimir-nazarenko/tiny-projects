@@ -4,7 +4,25 @@ package com.nazarenko;
  * Created by Vladimir Nazarenko on 7/30/16.
  */
 public class RecursiveMultiplier extends Multiplier {
-    
+
+    public RecursiveMultiplier() {
+        this(new StraightforwardMultiplier());
+    }
+
+    public RecursiveMultiplier(Multiplier multiplier) {
+//        if (multiplier instanceof RecursiveMultiplier)
+//            throw new IllegalArgumentException("Recursive initialization");
+        this(multiplier, 16);
+    }
+
+    public RecursiveMultiplier(Multiplier multiplier, int baseDim) {
+        base = multiplier;
+        this.baseDim = baseDim;
+    }
+
+    private final Multiplier base;
+    private final int baseDim;
+
     /**
      * Strategy method. Facilitates the multiplication of two submatrices. Gets two submatrices in terms of
      * upper-left element and lower-right element and adds their product to the corresponding submatrix of the
@@ -29,9 +47,10 @@ public class RecursiveMultiplier extends Multiplier {
         if (lLowerRow < lUpperRow || lRightCol < lLeftCol ||
                 (rLowerRow < rUpperRow || rRightCol < rLeftCol))
             return;
-        if (lLowerRow == lUpperRow && lRightCol == lLeftCol &&
-                   rUpperRow == rLowerRow && rRightCol == rLeftCol) {
-            result[lLowerRow][rLeftCol] += left[lLowerRow][lLeftCol] * right[rLowerRow][rLeftCol];
+        if (lLowerRow - lUpperRow < baseDim || lRightCol - lLeftCol < baseDim ||
+                   rLowerRow - rUpperRow < baseDim && rRightCol - rLeftCol < baseDim) {
+            base.multiply(lUpperRow, lLeftCol, lLowerRow, lRightCol, rUpperRow, rLeftCol, rLowerRow, rRightCol,
+                    left, right, result);
         }
         else {
             // left matrix rows etc.
