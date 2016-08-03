@@ -3,6 +3,10 @@ package com.nazarenko;
 /**
  * Created by Vladimir Nazarenko on 7/30/16.
  */
+
+/**
+ * Matrix multiplication in divide and conquer style.
+ */
 public class RecursiveMultiplier extends Multiplier {
 
     public RecursiveMultiplier() {
@@ -47,8 +51,7 @@ public class RecursiveMultiplier extends Multiplier {
         if (lLowerRow < lUpperRow || lRightCol < lLeftCol ||
                 (rLowerRow < rUpperRow || rRightCol < rLeftCol))
             return;
-        if (lLowerRow - lUpperRow < baseDim || lRightCol - lLeftCol < baseDim ||
-                   rLowerRow - rUpperRow < baseDim && rRightCol - rLeftCol < baseDim) {
+        if ((lLowerRow - lUpperRow + lRightCol - lLeftCol + rRightCol - rLeftCol) <= baseDim * 3 - 3) {
             base.multiply(lUpperRow, lLeftCol, lLowerRow, lRightCol, rUpperRow, rLeftCol, rLowerRow, rRightCol,
                     left, right, result);
         }
@@ -56,7 +59,7 @@ public class RecursiveMultiplier extends Multiplier {
             // left matrix rows etc.
             final int midLR = (lUpperRow + lLowerRow) / 2;
             final int midLC = (lLeftCol  + lRightCol) / 2;
-            final int midRR = (rUpperRow + rLowerRow) / 2;
+            final int midRR = midLC;
             final int midRC = (rLeftCol  + rRightCol) / 2;
             // AE AF CF CE BG BH DH DG
             multiply(lUpperRow, lLeftCol, midLR    , midLC    , rUpperRow, rLeftCol, midRR    , midRC    , left, right, result);

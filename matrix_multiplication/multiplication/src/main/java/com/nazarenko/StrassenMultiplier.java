@@ -5,6 +5,11 @@ import java.util.stream.IntStream;
 /**
  * Created by Vladimir Nazarenko on 7/30/16.
  */
+
+/**
+ * Performs multiplication using Strassen multiplication algorithm. This implementation is unoptimized.
+ * This implementation performs padding of the input matrices to 2^k for some positive integer k.
+ */
 public class StrassenMultiplier extends Multiplier {
 
     public StrassenMultiplier() {
@@ -25,6 +30,7 @@ public class StrassenMultiplier extends Multiplier {
     private final Multiplier base;
     private final int baseDim;
 
+    // Sums square matrices of equal dimensions
     private int[][] sumSquare(int[][]... A) {
         final int numArrays = A.length;
         final int dim = A[0].length;
@@ -36,6 +42,7 @@ public class StrassenMultiplier extends Multiplier {
         return sum;
     }
 
+    // Subtract matrices A from the matrix A1
     private int[][] subtractSquare(int[][] A1, int[][]... A) {
         final int numArrays = A.length;
         final int dim = A[0].length;
@@ -50,6 +57,8 @@ public class StrassenMultiplier extends Multiplier {
         return sum;
     }
 
+    // Get one of submatrices (A11, A12, A21, A22) of the square matrix. Row and col are indices of the submatrix and
+    // are from the 1..2 set.
     private int[][] splitSquare(int[][] A, int row, int col) {
         final int n = A.length;
         final int rowOffset = (row - 1) * n / 2;
@@ -61,6 +70,7 @@ public class StrassenMultiplier extends Multiplier {
         return result;
     }
 
+    // Opposite action to splitSquare
     private void joinSquare(int[][] source, int[][] target, int row, int col) {
         final int n = source.length;
         final int rowOffset = (row - 1) * n;

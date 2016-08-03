@@ -12,9 +12,22 @@ import java.util.concurrent.Future;
 /**
  * Created by Vladimir Nazarenko on 7/31/16.
  */
+
+/**
+ * Divides matrix in #{numOfCores} pieces and multiplies each in the distinct thread.
+ */
 public class ParallelCPUMultiplier extends Multiplier {
 
-    private Multiplier multiplier = new RowWiseMultiplier();
+    private final Multiplier multiplier;
+
+    public ParallelCPUMultiplier() {
+        this(new IKJMultiplier());
+    }
+
+    public ParallelCPUMultiplier(Multiplier multiplier) {
+        this.multiplier = multiplier;
+    }
+
     /**
      * Strategy method. Facilitates the multiplication of two submatrices. Gets two submatrices in terms of
      * upper-left element and lower-right element and adds their product to the corresponding submatrix of the
@@ -67,6 +80,7 @@ public class ParallelCPUMultiplier extends Multiplier {
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+        executor.shutdown();
     }
 
     private int ceilDiv(int a, int b) {
@@ -91,6 +105,9 @@ public class ParallelCPUMultiplier extends Multiplier {
         return new AbstractMap.SimpleEntry<>(gridWidth, gridHeight);
     }
 
+    /**
+     * Task of multiplying two submatrices for a thread.
+     */
     private final static class MatrixWorker implements Runnable {
 
         public MatrixWorker(int lUpperRow, int lLeftCol, int lLowerRow, int lRightCol,
